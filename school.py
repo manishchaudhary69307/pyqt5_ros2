@@ -94,6 +94,11 @@ class MainApp(QMainWindow, ui):
         else:
             print("AWS MQTT thread not available")
 
+    def set_aws_mqtt_thread(self, mqtt_thread):
+        """Store reference to AWS MQTT thread"""
+        self.aws_mqtt_thread = mqtt_thread
+        print("AWS MQTT thread reference set in UI")
+
     @pyqtSlot(str)
     def update_ui_with_message(self, message):
         """Update the UI with the received message (thread-safe)------------------------------------------------------------------------------------"""
@@ -104,71 +109,68 @@ class MainApp(QMainWindow, ui):
             print(f"Error updating UI: {e}")
 
 
-    def set_aws_mqtt_thread(self, mqtt_thread):
-        """Store reference to AWS MQTT thread"""
-        self.aws_mqtt_thread = mqtt_thread
-        print("AWS MQTT thread reference set in UI")
+  
 
-    # Login Form Authentication
-    def login(self):
-        un = self.led_username.text()
-        pw = self.led_password.text()
-        if un == "admin" and pw == "admin":
-            self.menubar.setVisible(True)
-            self.tabWidget.setCurrentIndex(1)
-            self.tabWidget.tabBar().setVisible(True)
-        else:
-            QMessageBox.information(self, "ROS2 Project")
+    # # Login Form Authentication
+    # def login(self):
+    #     un = self.led_username.text()
+    #     pw = self.led_password.text()
+    #     if un == "admin" and pw == "admin":
+    #         self.menubar.setVisible(True)
+    #         self.tabWidget.setCurrentIndex(1)
+    #         self.tabWidget.tabBar().setVisible(True)
+    #     else:
+    #         QMessageBox.information(self, "ROS2 Project")
 
-    # Add New Student
-    def show_add_new_student_tab(self):
-        self.tabWidget.setCurrentIndex(2)
-        self.fill_next_registration_number()
+    # # Add New Student
+    # def show_add_new_student_tab(self):
+    #     self.tabWidget.setCurrentIndex(2)
+    #     self.fill_next_registration_number()
 
-    def fill_next_registration_number(self):
-        try:
-            rn = 0
-            mydb = con.connect(host="localhost", user="root", 
-                              password="admin@1122", db="school")
-            cursor = mydb.cursor()
-            cursor.execute("SELECT MAX(registration_number) FROM student")
-            result = cursor.fetchone()
-            if result and result[0] is not None:
-                rn = result[0]
-            self.led_registration_number.setText(str(rn + 1))
-        except con.Error as e:
-            print("Error has occurred: " + str(e))
-            self.led_registration_number.setText("1001")
+    # def fill_next_registration_number(self):
+    #     try:
+    #         rn = 0
+    #         mydb = con.connect(host="localhost", user="root", 
+    #                           password="admin@1122", db="school")
+    #         cursor = mydb.cursor()
+    #         cursor.execute("SELECT MAX(registration_number) FROM student")
+    #         result = cursor.fetchone()
+    #         if result and result[0] is not None:
+    #             rn = result[0]
+    #         self.led_registration_number.setText(str(rn + 1))
+    #     except con.Error as e:
+    #         print("Error has occurred: " + str(e))
+    #         self.led_registration_number.setText("1001")
 
-    def save_student_details(self):
-        try:
-            mydb = con.connect(host="localhost", user="root", 
-                              password="admin@1122", db="school")
-            cursor = mydb.cursor()
-            registration_number = self.led_registration_number.text()
-            # full_name = self.led_full_name.text()
-            gender = self.cb_gender.currentText()
-            email = self.led_email.text()
-            phone = self.led_phone.text()
-            address = self.tb_address.toPlainText()
-            standard = self.cb_standard.currentText()
-            date_of_birth = "14 april"
-            age = 12
+    # def save_student_details(self):
+    #     try:
+    #         mydb = con.connect(host="localhost", user="root", 
+    #                           password="admin@1122", db="school")
+    #         cursor = mydb.cursor()
+    #         registration_number = self.led_registration_number.text()
+    #         # full_name = self.led_full_name.text()
+    #         gender = self.cb_gender.currentText()
+    #         email = self.led_email.text()
+    #         phone = self.led_phone.text()
+    #         address = self.tb_address.toPlainText()
+    #         standard = self.cb_standard.currentText()
+    #         date_of_birth = "14 april"
+    #         age = 12
             
-            qry = """INSERT INTO student(registration_number, full_name, gender, 
-                     date_of_birth, age, address, phone, email, standard) 
-                     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"""
-            # value = (registration_number, full_name, gender, date_of_birth, 
-            #         age, address, phone, email, standard)
-            value=(registration_number, full_name, "Male", "2024-11-2", 24,"kirtipr",12212222, "mahnisschaudhary@gmail.com", "hello")
-            cursor.execute(qry, value)
-            mydb.commit()
-            QMessageBox.information(self, "Student data", 
-                                   "Student data saved successfully")
+    #         qry = """INSERT INTO student(registration_number, full_name, gender, 
+    #                  date_of_birth, age, address, phone, email, standard) 
+    #                  VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+    #         # value = (registration_number, full_name, gender, date_of_birth, 
+    #         #         age, address, phone, email, standard)
+    #         value=(registration_number, full_name, "Male", "2024-11-2", 24,"kirtipr",12212222, "mahnisschaudhary@gmail.com", "hello")
+    #         cursor.execute(qry, value)
+    #         mydb.commit()
+    #         QMessageBox.information(self, "Student data", 
+    #                                "Student data saved successfully")
             
-        except con.Error as e:
-            QMessageBox.critical(self, "Database Error", 
-                                f"Error occurred while saving data: {str(e)}")
+    #     except con.Error as e:
+    #         QMessageBox.critical(self, "Database Error", 
+    #                             f"Error occurred while saving data: {str(e)}")
 
 
 
