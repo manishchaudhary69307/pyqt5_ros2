@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=vehicle nav
+Comment=Control MQTT devices and view weather
+Exec=/home/mahniss-linux/Documents/school-pyqt5/dist/main/main
+Terminal=false
+Type=Application
+Categories=Utility

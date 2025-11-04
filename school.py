@@ -5,24 +5,29 @@ import sys
 from PyQt5.uic import loadUiType
 import mysql.connector as con
 import os
+from ui_school_controls import Ui_SchoolControls
+
 
 # Get the absolute path to the UI file
 current_dir = os.path.dirname(os.path.abspath(__file__))
-ui_file = os.path.join(current_dir, 'school_controls.ui')
+# ui_file = os.path.join(current_dir, 'school_controls.ui')
 
-ui, _ = loadUiType(ui_file)
+# ui, _ = loadUiType(ui_file)
 
-class MainApp(QMainWindow, ui):
+class MainApp(QMainWindow):
     # Define a signal to receive messages from MQTT thread
     mqtt_message_received = pyqtSignal(str)
     
     def __init__(self):
         QMainWindow.__init__(self)
-        self.setupUi(self)
+        self.ui = Ui_SchoolControls()
+
+        self.ui.setupUi(self)
         
-        self.tabWidget.setCurrentIndex(7)
-        self.tabWidget.tabBar().setVisible(False)
-        self.menubar.setVisible(False)
+        self.ui.tabWidget.setCurrentIndex(7)
+        self.ui.tabWidget.tabBar().setVisible(False)
+        self.ui.menubar.setVisible(False)
+        self.setFixedSize(1000, 680)        # Your desired size
         # self.btn_login.clicked.connect(self.login)
         # self.menu11.triggered.connect(self.show_add_new_student_tab)
         # self.btn_save_std_details.clicked.connect(self.save_student_details)
@@ -50,11 +55,11 @@ class MainApp(QMainWindow, ui):
     def setup_buttons(self):
         """Setup button connections"""
         # Assuming you have buttons named: btn_forward, btn_backward, etc.
-        self.btn_forward.clicked.connect(lambda: self.on_direction_button_clicked("forward"))
-        self.btn_backward.clicked.connect(lambda: self.on_direction_button_clicked("backward"))
-        self.btn_left.clicked.connect(lambda: self.on_direction_button_clicked("left"))
-        self.btn_right.clicked.connect(lambda: self.on_direction_button_clicked("right"))
-        self.btn_stop.clicked.connect(lambda: self.on_direction_button_clicked("stop"))
+        self.ui.btn_forward.clicked.connect(lambda: self.on_direction_button_clicked("forward"))
+        self.ui.btn_backward.clicked.connect(lambda: self.on_direction_button_clicked("backward"))
+        self.ui.btn_left.clicked.connect(lambda: self.on_direction_button_clicked("left"))
+        self.ui.btn_right.clicked.connect(lambda: self.on_direction_button_clicked("right"))
+        self.ui.btn_stop.clicked.connect(lambda: self.on_direction_button_clicked("stop"))
 
 
     def on_direction_button_clicked(self, button_name):
